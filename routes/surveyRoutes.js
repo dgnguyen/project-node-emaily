@@ -16,15 +16,15 @@ module.exports = app => {
 
     const survey = new Survey({
       title,
-      subjec,
+      subject,
       body,
-      recipients: recipients.split(',').map(email => { email: email.trim() }}),
+      recipients: recipients.split(',').map(email => ({ email: email.trim() })),
       _user: req.user.id,
       dateSend: Date.now(),
     })
 
-  // Prepare template and send survey to sendgrid
-  const mailer = new Mailer(survey, surveyTemplate(survey))
-
-})
+    // Prepare template and send survey to sendgrid
+    const mailer = new Mailer(survey, surveyTemplate(survey))
+    mailer.send()
+  })
 }
