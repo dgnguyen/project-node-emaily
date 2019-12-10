@@ -10,7 +10,7 @@ const Mailer = require('../services/Mailer')
 const Survey = mongoose.model('surveys')
 
 module.exports = app => {
-  app.post('/api/surveys', requireLogin, requireCredits, (req, res) => {
+  app.post('/api/surveys', requireLogin, requireCredits, async (req, res) => {
     //Save survey in mongoose
     const { body, title, subject, recipients } = req.body
 
@@ -25,6 +25,19 @@ module.exports = app => {
 
     // Prepare template and send survey to sendgrid
     const mailer = new Mailer(survey, surveyTemplate(survey))
-    mailer.send()
+    try {
+      await mailer.send()
+      //save in database after send mail
+      await survey.save()
+      // credited user
+      req.user.credits -= 1
+      const user = await req.user.save()
+      //sendback user with credit updated
+      res.send(user)
+    }
+    //Send back error if something wrong
+    catch (err) {
+      res.status(422)
+    }
   })
 }
