@@ -8,9 +8,10 @@ import reduxThunk from 'redux-thunk';
 import App from './components/App';
 import reducers from './reducers';
 
-// Development only axios helpers!
+// Development only : axios helpers to test BE result!
 import axios from 'axios';
 window.axios = axios;
+// Development only : axios helpers to test BE result!
 
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
 

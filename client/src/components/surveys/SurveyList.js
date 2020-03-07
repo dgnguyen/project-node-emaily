@@ -38,8 +38,8 @@ class SurveyList extends Component {
   }
 }
 
-function mapStateToProps({ surveys }) {
-  return { surveys };
-}
-
-export default connect(mapStateToProps, { fetchSurveys })(SurveyList);
+export default connect(
+  ({ surveys }) => ({
+    surveys,
+  }),
+  { fetchSurveys })(SurveyList);
